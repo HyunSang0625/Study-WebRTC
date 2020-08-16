@@ -37,7 +37,9 @@ downloadButton.addEventListener('click', () => {
   a.href = url;
   a.download = 'test.webm';
   document.body.appendChild(a);
+  console.log('[Download] Recording Video Downloading...')
   a.click();
+  console.log('[Download Complete] Recording Video Download Completion 🎉');
   setTimeout(() => {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
