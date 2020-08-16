@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<title></title>
+</head>
+<body>
+	<div id="container">
+    	<video id="gum" playsinline autoplay muted></video>
+    	<video id="recorded" playsinline loop></video>
+    	<div>
+        	<button id="start">Start camera</button>
+        	<button id="record" disabled>Start Recording</button>
+        	<button id="play" disabled>Play</button>
+        	<button id="download" disabled>Download</button>
+    	</div>
+    	<div>
+        	<h4>Media Stream Constraints options</h4>
+        	<p>Echo cancellation: <input type="checkbox" id="echoCancellation">	</p>
+    	</div>
+    	<div>
+        	<span id="errorMsg"></span>
+    	</div>
+	</div>
+</body>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<script src="./main.js"></script>
+</html>
