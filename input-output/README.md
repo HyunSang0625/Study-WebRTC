@@ -17,5 +17,11 @@ const constraints = {
     video: {deviceId: videoSource ? {exact: videoSource} : undefined}
 };
 ```
+## v0.0.1
+- 기본적인 장치 선택 가능
 
-![Runing WebRTC](./image/main.png);
+![Runing WebRTC](./image/main.png)
+
+**v0.0.2 추가될 기능**  
+- RePlay 기능 추가
+- Record Download 기능 추가
