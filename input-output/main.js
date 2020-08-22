@@ -79,6 +79,7 @@ function handleError(error) {
 }
 
 function start() {
+  console.log('[WebRTC START]');
   if (window.stream) {
     window.stream.getTracks().forEach(track => {
       track.stop();
@@ -93,6 +94,9 @@ function start() {
     audio: false,
     video: {deviceId: videoSource ? {exact: videoSource} : undefined}
   };
+  console.log('[WebRTC SETTING]')
+  console.log('AUDIO SETTING : ',constraints['audio']);
+  console.log('VIDEO SETTING : ',constraints['video']);
   navigator.mediaDevices.getUserMedia(constraints).then(gotStream).then(gotDevices).catch(handleError);
 }
 
