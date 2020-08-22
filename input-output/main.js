@@ -1,5 +1,8 @@
 'use strict';
 
+let recordedBlobs;
+let mediaDevices;
+
 const videoElement = document.querySelector('video');
 const audioInputSelect = document.querySelector('select#audioSource');
 const audioOutputSelect = document.querySelector('select#audioOutput');
@@ -76,6 +79,84 @@ function gotStream(stream) {
 
 function handleError(error) {
   console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+}
+
+const downloadButton = document.querySelector('button#download');
+downloadButton.addEventListener('click', () => {
+  const webm = 'video/webm'
+  const date = new Date;
+  const blob = new Blob(recordedBlobs, {type: webm});
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  a.download = `${date}.webm`;
+  document.body.appendChild(a);
+  console.log('[DOWNLOAD] RECORDING VIDEO DOWNLOADING');
+  a.click();
+  console.log('[DOWNLOAD COMPLETE] Recording VIDEO DOWNLOAD COMPLETION');
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 100);
+});
+
+const recordButton = document.querySelector('button#record');
+recordButton.addEventListener('click', () => {
+  if(recordButton.textContent === 'Start Recording'){
+    startRecording();
+  } else {
+    stopRecording();
+    recordButton.textcontent = 'Start Recording';
+    playButton.disabled = false;
+    downloadButton.disabled = false;
+  }
+})
+
+function startRecording() {
+  recordedBlobs = [];
+  var mimeType = 'video/webm';
+  let options = {mimeType: `${mimeType}; codecs=vp9, opus`};
+  if(!MediaRecorder.isTypeSupported(options.mimeType)){
+    console.error(`${options.mimeType} is not supported`);
+    options = {mimeType: 'video/webm;codecs=vp8, opus'};
+    if(!MediaRecorder.isTypeSupported(options.mimeType)){
+      console.error(`${options.mimeType} is not supported`);
+      options = {mimeType: mimeType}
+      if(!MediaRecorder.isTypeSupported(options.mimeType)){
+        console.error(`${options.mimeType} is not supported`);
+        options = {mimeType: mimeType};
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+          options = {mimeType: ''};
+        }
+      }
+    }
+    try{
+      mediaRecorder = new MediaRecorder(window.strem, options);
+    } catch (e) {
+      console.error('Exception while creating MediaRecorder:', e);
+      errorMsgElement.innerHTML = `Exception while creating MediaRecorder: ${JSON.stringify(e)}`;
+      return;
+    }
+  }
+  console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
+  recordButton.textContent = 'Stop Recording';
+  playButton.disabled = true;
+  downloadButton.disabled = true;
+  mediaRecorder.onstop = (event) => {
+    console.log('Recorder stopped: ', event);
+    console.log('Recorded Blobs: ', recordedBlobs);
+  };
+  mediaRecorder.ondataavailable = handleDataAvailable;
+  mediaRecorder.start();
+  console.log('MediaRecorder started', mediaRecorder);
+}
+
+function handleDataAvailable(event){
+  console.log('handleDataAvailable', event);
+  if (event.data && event.data.size > 0){
+    recordedBlobs.push(event.data);
+  }
 }
 
 function start() {
