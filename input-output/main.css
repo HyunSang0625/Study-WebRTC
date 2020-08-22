@@ -9,8 +9,15 @@ select {
     margin-left: 20px;
 }
 button{
+    display: inline-table;
     margin-left: 20px;
     margin-bottom: 10px;
+    width: 80px;
+    height: 30px;
+    background-color: #DC143C;
+    color: #ffffff;
+    border:  1px solid #ffffff;
+    border-radius: 20px;
 }
 video {
     margin-left: 20px;
